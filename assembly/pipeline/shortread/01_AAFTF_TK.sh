@@ -17,7 +17,7 @@ module load AAFTF
 
 FASTQ=input/illumina
 SAMPLEFILE=samples.csv
-ASM=genomes
+ASM=asm/AAFTF
 WORKDIR=working_AAFTF
 mkdir -p $ASM $WORKDIR
 if [ -z $CPU ]; then

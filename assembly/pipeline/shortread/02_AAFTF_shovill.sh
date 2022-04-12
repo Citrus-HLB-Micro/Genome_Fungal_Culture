@@ -16,10 +16,10 @@ fi
 
 OUTDIR=input
 
-SAMPLEFILE=samples.dat
+SAMPLEFILE=samples.csv
 BASE=$(sed -n ${N}p $SAMPLEFILE | cut -f1 -d,)
 PHYLUM=$(sed -n ${N}p $SAMPLEFILE | cut -f3 -d,)
-ASM=genomes
+ASM=asm/shovill
 TMPDIR=/scratch/$USER
 MINLEN=500
 
@@ -47,7 +47,7 @@ echo "$BASE"
 if [ ! -f $ASMFILE ]; then    
     if [ ! -f $LEFT ]; then
 	echo "Cannot find LEFT $LEFT or RIGHT $RIGHT - did you run"
-	echo "$OUTDIR/${BASE}_R1.fq.gz $OUTDIR/${BASE}_R2.fq.gz"
+	echo "$INDIR/${BASE}_R1.fq.gz $INDIR/${BASE}_R2.fq.gz"
 	exit
     fi
     module load shovill
@@ -57,7 +57,7 @@ if [ ! -f $ASMFILE ]; then
     if [ -f $WORKDIR/shovill_${BASE}/contigs.fa ]; then
 	rsync -av $WORKDIR/shovill_${BASE}/contigs.fa $ASMFILE
     else	
-	echo "Cannot find $OUTDIR/shovill_${BASE}/contigs.fa"
+	echo "Cannot find $WORKDIR/shovill_${BASE}/contigs.fa"
     fi
     
     if [ -s $ASMFILE ]; then
