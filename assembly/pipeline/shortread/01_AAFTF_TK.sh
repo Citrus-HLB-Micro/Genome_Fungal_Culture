@@ -1,7 +1,7 @@
 #!/bin/bash -l
-#SBATCH -p short -N 1 -n 8 --mem 64gb --out logs/AAFTF.%a.log
+#SBATCH -p short -N 1 -n 16 --mem 96gb --out logs/AAFTF.%a.log
 
-MEM=64
+MEM=96
 CPU=$SLURM_CPUS_ON_NODE
 N=${SLURM_ARRAY_TASK_ID}
 
@@ -48,11 +48,12 @@ do
     if [ ! -f $ASMFILE ]; then # can skip we already have made an assembly
 	if [ ! -f $LEFT ]; then # can skip filtering if this exists means already processed
 	    if [ ! -f $LEFTTRIM ]; then
-		AAFTF trim --method bbduk --memory $MEM --left $LEFTIN --right $RIGHTIN -c $CPU -o $WORKDIR/${STRAIN}
+		AAFTF trim --method bbduk --memory $MEM --left $LEFTIN --right $RIGHTIN -c $CPU -o $WORKDIR/${BASE}
 	    fi
-	    AAFTF filter -c $CPU --memory $MEM -o $WORKDIR/${STRAIN} --left $LEFTTRIM --right $RIGHTTRIM --aligner bbduk
+	    AAFTF filter -c $CPU --memory $MEM -o $WORKDIR/${BASE} --left $LEFTTRIM --right $RIGHTTRIM --aligner bbduk
 	    if [ -f $LEFT ]; then
-		rm $LEFTTRIM $RIGHTTRIM # remove intermediate file
+		#rm $LEFTTRIM $RIGHTTRIM # remove intermediate file
+		echo "found $LEFT"
 	    fi
 	fi
 	AAFTF assemble -c $CPU --left $LEFT --right $RIGHT  --memory $MEM \
@@ -75,22 +76,22 @@ do
 	AAFTF sourpurge -i $VECCLEAN -o $PURGE -c $CPU --phylum $PHYLUM --left $LEFT --right $RIGHT
     fi
     
-    #    if [ ! -f $CLEANDUP ]; then
-    #	AAFTF rmdup -i $PURGE -o $CLEANDUP -c $CPU -m 500
-    #    fi
+    if [ ! -f $CLEANDUP ]; then
+    	AAFTF rmdup -i $PURGE -o $CLEANDUP -c $CPU -m 500
+    fi
     
-    #    if [ ! -f $PILON ]; then
-    #	AAFTF pilon -i $CLEANDUP -o $PILON -c $CPU --left $LEFT  --right $RIGHT
-    #    fi
+    if [ ! -f $PILON ]; then
+    	AAFTF pilon -i $CLEANDUP -o $PILON -c $CPU --left $LEFT  --right $RIGHT
+    fi
     
-    #    if [ ! -f $PILON ]; then
-    #	echo "Error running Pilon, did not create file. Exiting"
-    #	exit
-    #    fi
+    if [ ! -f $PILON ]; then
+    	echo "Error running Pilon, did not create file. Exiting"
+    	exit
+    fi
     
     if [ ! -f $SORTED ]; then
-	# AAFTF sort -i $PILON -o $SORTED
-	AAFTF sort -i $VECCLEAN -o $SORTED
+	 AAFTF sort -i $PILON -o $SORTED
+#	AAFTF sort -i $VECCLEAN -o $SORTED
     fi
     
     if [ ! -f $STATS ]; then
