@@ -24,7 +24,7 @@ fi
 
 mkdir -p $OUTDIR
 IFS=,
-SAMPLES=samples.csv
+SAMPLES=nanopore_samples.csv
 
 sed -n ${N}p $SAMPLES | while read STRAIN NANOPORE
 do
