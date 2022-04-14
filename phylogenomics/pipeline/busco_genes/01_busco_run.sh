@@ -1,10 +1,12 @@
 #!/bin/bash -l
-#SBATCH -p intel -n 8 -N 1 --mem 16gb --out logs/busco_AAFTF.%a.log
+#SBATCH -p intel -n 8 -N 1 --mem 16gb --out logs/busco_AAFTF.%a.log --time 12:00:00
 
-
+module load busco
+# need a writeable folder for BUSCO augustus training
+export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
 IN=genomes
 OUT=BUSCO
-export AUGUSTUS_CONFIG_PATH=/bigdata/stajichlab/shared/pkg/augustus/3.3/config
+DB=sordariomycetes_odb10
 CPU=1
 if [ $SLURM_CPUS_ON_NODE ]; then
   CPU=$SLURM_CPUS_ON_NODE
@@ -25,15 +27,16 @@ if [ ! -d $OUT ]; then
 fi
 
 
-
 INFILE=$(ls $IN/*.dna.fasta | sed -n ${N}p)
 BASE=$(basename $INFILE .dna.fasta)
 
+FILE=short_summary.specific.$DB.$BASE.json
 if [ ! -d $OUT/$BASE ]; then
-  module load busco
-  busco -m genome -l sordariomycetes_odb10 -c $CPU -o $BASE --out_path $OUT --offline --augustus_species fusarium --in $INFILE --download_path $BUSCO_LINEAGES
+  busco -m genome -l $DB -c $CPU -o $BASE --out_path $OUT --offline --augustus_species fusarium --in $INFILE --download_path $BUSCO_LINEAGES
+ elif [ ! -f $OUT/$BASE/$FILE ]; then
+  busco -m genome -l $DB -c $CPU -o $BASE --out_path $OUT --offline --augustus_species fusarium --in $INFILE --download_path $BUSCO_LINEAGES --restart
+ fi
   module unload busco
-fi
 if [ ! -s $IN/$BASE.stats.txt ]; then
   module load AAFTF
   AAFTF assess -i $INFILE -r $IN/$BASE.stats.txt
