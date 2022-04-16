@@ -1,0 +1,26 @@
+#basic setup needs to be changed
+PHYLING_DIR=../PHYling_unified
+HMM=sordariomycetes_odb10.2021
+PREFIX=EDCRE_v1
+HMM_FOLDER=HMM
+PEPDIR=pep
+CDSDIR=cds
+INPEPEXT=aa.fasta
+INCDSEXT=cds.fasta
+ALLSEQNAME=allseq
+OUTPEPEXT=aa.fa
+OUTCDSEXT=cds.fa
+LISTFILE=pepfile.lst
+BESTHITEXT=best
+HMMSEARCH_CUTOFF=1e-30
+HMMSEARCH_OUTDIR=search
+ALN_OUTDIR=aln
+LANGUAGE=en
+#job runs
+JOBCPU=2 # per job CPUs
+TOTALCPU=8 # total CPUs to use
+QUEUEING=slurm
+QUEUE=short
+ALNCHUNK=10
+TEMP=/scratch
+# tree building - not yet integrated into PHYling
