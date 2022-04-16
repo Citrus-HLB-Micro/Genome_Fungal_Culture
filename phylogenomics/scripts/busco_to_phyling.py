@@ -231,11 +231,13 @@ for spdir in dirsToRun:
                 BUSCO_lineage = buscorun.replace("run_", "")
 
                 for orthseqfile in os.listdir(seqFolder):
+                    if not orthseqfile.endswith(".faa"):
+                        continue
                     orthologname = orthseqfile.replace(".faa", "")
                     if orthologname not in orthologs:
                         orthologs[orthologname] = {BUSCO_lineage: {}}
                     orthologfile = os.path.join(seqFolder, orthseqfile)
-                    #print("{} -> {}".format(genome_file,orthologfile))
+#                    print("{} -> {}".format(genome_file,orthologfile))
                     run_CDS_pep_gather.append(
                         [BUSCO_lineage, genome_file, orthologfile, args.temp, args.exonerate])
 
@@ -278,20 +280,27 @@ if os.path.exists(args.prefixfile):
                 prefixes[row[0]] = row[1]
                 prefixes_rev[row[1]] = row[0]
 else:
-    for sp in sp_folders:
+    for sp in sp_folders:        
+        #       print("spname is {}".format(sp))
         prefix = ""
         longname = sp
         longname = re.sub(r'_$', '', longname)
         spmod = re.sub(r'(cf|sp)\._', '', longname)
         name = spmod.split("_", 2)
-
-        if len(name) == 2 or len(name[2]) == 0:
-            prefix = name[0][0] + name[1][0:3]
+        name = spmod.split("_", 2)
+        if len(name) == 1:
+            prefix = name[0]
+        elif len(name) ==2 or len(name[2]) == 0:
+            prefix = name[0][0] + name[0][1] + name[1][0:3]
+        elif len(name) > 2:
+            prefix =  name[0][0] + name[0][1] + name[1][0:3] + name[2]
         else:
-            prefix = name[2]
-        # print(prefix,longname)
+            prefix = spmod
+        prefix = re.sub(r'-','_',prefix)
+        print(prefix,longname)
         prefixes[prefix] = sp
         prefixes_rev[sp] = prefix
+
     with open(args.prefixfile, "wt") as ofh:
         for p in sorted(prefixes):
             ofh.write("\t".join([p, prefixes[p]]) + "\n")
