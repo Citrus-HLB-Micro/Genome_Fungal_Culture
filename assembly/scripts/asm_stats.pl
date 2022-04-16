@@ -43,17 +43,26 @@ foreach my $file ( readdir(DIR) ) {
     if ( -d $telomere_report ) {
 
 	if ( $first ) {
-	    push @header, qw(Telomeres_Found Telomeres_Fwd Telomeres_Rev);
+	    push @header, qw(Telomeres_Found Telomeres_Fwd Telomeres_Rev Telomeres_CompleteChrom);
 	}
 	my $telomerefile = File::Spec->catfile($telomere_report,sprintf("%s.telomere_report.txt",$stem));
 	
 	if ( -f $telomerefile ) {
 	    open(my $fh => $telomerefile) || die $!;
+	    my %contigs_with_tel;
 	    while(<$fh>) {
-		if (/^Telomeres found:\s+(\d+)\s+\((\S+)\s+forward,\s+(\S+)\s+reverse\)/ ) {
+		if( /^(\S+)\s+(Forward|Reverse)\s+(\S+)/ ){
+		    $contigs_with_tel{$1}->{$2} = $3;
+		} elsif (/^Telomeres found:\s+(\d+)\s+\((\S+)\s+forward,\s+(\S+)\s+reverse\)/ ) {
 		    $stats{$stem}->{'Telomeres_Found'} = $1;
 		    $stats{$stem}->{'Telomeres_Fwd'} = $2;
 		    $stats{$stem}->{'Telomeres_Rev'} = $3;
+		}
+	    }
+	    for my $ctg ( keys %contigs_with_tel ) {
+		if (exists $contigs_with_tel{$ctg}->{'Forward'} &&
+		    exists $contigs_with_tel{$ctg}->{'Reverse'} ) {
+		    $stats{$stem}->{'Telomeres_CompleteChrom'} +=1; # or ++ but count up the number of times we have a ctg w fwd&rev
 		}
 	    }
 	}
