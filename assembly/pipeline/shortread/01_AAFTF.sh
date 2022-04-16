@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -p short -N 1 -n 16 --mem 96gb --out logs/AAFTF.%a.log
+#SBATCH -p batch -N 1 -n 16 --mem 96gb --out logs/AAFTF.%a.log
 
 MEM=96
 CPU=$SLURM_CPUS_ON_NODE
