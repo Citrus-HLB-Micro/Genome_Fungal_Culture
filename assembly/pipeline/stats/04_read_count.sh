@@ -15,17 +15,18 @@ if [ ! $N ]; then
     fi
 fi
 
-INDIR=input
-SAMPLEFILE=samples.dat
-BASE=$(sed -n ${N}p $SAMPLEFILE | cut -f1 -d,)
+INDIR=input/illumina
+SAMPLEFILE=samples.csv
+BASE=$(sed -n ${N}p $SAMPLEFILE | cut -f2 -d,)
+FULL=$(sed -n ${N}p $SAMPLEFILE | cut -f1 -d,)
 
 ASM=genomes
 OUTDIR=mapping_report
-SORTED=$(realpath $ASM/${BASE}.sorted.fasta)
+SORTED=$(realpath $ASM/${FULL}.sorted.fasta)
 
-LEFT=$(ls $INDIR/${BASE}_S*_R1.fastq.gz)
+LEFT=$(ls $INDIR/${BASE}_R1_001.fastq.gz)
 LEFT=$(realpath $LEFT)
-RIGHT=$(ls $INDIR/${BASE}_S*_R2.fastq.gz)
+RIGHT=$(ls $INDIR/${BASE}_R2_001.fastq.gz)
 RIGHT=$(realpath $RIGHT)
 echo "$LEFT $RIGHT"
 mkdir -p $OUTDIR

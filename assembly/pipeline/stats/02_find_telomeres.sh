@@ -1,5 +1,5 @@
 #!/usr/bin/bash -l
-#SBATCH -p short -N 1 -n 4 --mem 24gb  --out logs/find_telomees.log
+#SBATCH -p short -N 1 -n 4 --mem 24gb  --out logs/find_telomeres.log
 
 module load parallel
 

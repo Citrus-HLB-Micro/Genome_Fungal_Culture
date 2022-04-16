@@ -4,18 +4,18 @@
 module load AAFTF
 
 IFS=,
+NANOPORE=nanopore_samples.csv
 SAMPLES=samples.csv
 INDIR=asm
 OUTDIR=genomes
 
 mkdir -p $OUTDIR
-while read STRAIN NANOPORE
+cat $NANOPORE | while read STRAIN NANOPORE ILLUMINA
 do
     rsync -a $INDIR/canu/$STRAIN/$STRAIN.contigs.fasta $OUTDIR/$STRAIN.canu.fasta
     rsync -a $INDIR/flye/$STRAIN/assembly.fasta $OUTDIR/$STRAIN.flye.fasta
     rsync -a $INDIR/NECAT/$STRAIN/$STRAIN/6-bridge_contigs/polished_contigs.fasta $OUTDIR/$STRAIN.necat.fasta
-
-    for type in canu flye
+    for type in canu flye 
     do
     	rsync -a $INDIR/medaka/$STRAIN/$type.polished.fasta $OUTDIR/$STRAIN.${type}.medaka.fasta
 	rsync -a $INDIR/pilon/$STRAIN/$type.pilon.fasta $OUTDIR/$STRAIN.$type.pilon.fasta 
@@ -34,17 +34,21 @@ do
 	    fi
 	done
     done    
-    if [[ ! -f $OUTDIR/$STRAIN.necat.stats.txt || $OUTDIR/$STRAIN.necat.fasta -nt $OUTDIR/$STRAIN.necat.stats.txt ]]; then
-    	AAFTF assess -i $OUTDIR/$STRAIN.necat.fasta -r $OUTDIR/$STRAIN.necat.stats.txt
-    fi
+    for type in necat
+    do
+	if [[ ! -f $OUTDIR/$STRAIN.$type.stats.txt || $OUTDIR/$STRAIN.$type.fasta -nt $OUTDIR/$STRAIN.$type.stats.txt ]]; then
+    	    AAFTF assess -i $OUTDIR/$STRAIN.$type.fasta -r $OUTDIR/$STRAIN.$type.stats.txt
+	fi
+    done
+done
 
-    #type=necat
-    #polishtype=pilon
-    #rsync -a $INDIR/pilon/$STRAIN/$type.$polishtype.fasta $OUTDIR/$STRAIN.$type.$polishtype.fasta
-    #if [[ ! -f $OUTDIR/$STRAIN.$type.$polishtype.stats.txt || $OUTDIR/$STRAIN.$type.$polishtype.fasta -nt $OUTDIR/$STRAIN.$type.$polishtype.stats.txt ]]; then
-	#    AAFTF assess -i $OUTDIR/$STRAIN.$type.$polishtype.fasta -r $OUTDIR/$STRAIN.$type.$polishtype.stats.txt
-    #fi
-
-done < $SAMPLES
-
-
+cat $SAMPLES | while read STRAIN ILLUMINA FAMILY PHYLUM
+do
+    for type in AAFTF shovill
+    do
+	rsync -a $INDIR/$type/$STRAIN.sorted.fasta $OUTDIR/$STRAIN.$type.fasta
+	if [[ ! -f $OUTDIR/$STRAIN.$type.stats.txt || $OUTDIR/$STRAIN.$type.fasta -nt $OUTDIR/$STRAIN.$type.stats.txt ]]; then
+    	    AAFTF assess -i $OUTDIR/$STRAIN.$type.fasta -r $OUTDIR/$STRAIN.$type.stats.txt
+	fi
+    done
+done
