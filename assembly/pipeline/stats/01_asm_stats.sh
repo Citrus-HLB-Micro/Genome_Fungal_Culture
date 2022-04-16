@@ -24,22 +24,27 @@ do
 		AAFTF assess -i $OUTDIR/$STRAIN.$type.fasta -r $OUTDIR/$STRAIN.$type.stats.txt
 	    fi
 	fi
-	#for polishtype in medaka pilon
-	for polishtype in medaka 
+	# copy medka
+	rsync -a $INDIR/$polishtype/$STRAIN/$type.polished.fasta $OUTDIR/$STRAIN.$type.$polishtype.fasta
+		
+	# copy pilon
+	if [[ ! -f $OUTDIR/$STRAIN.$type.$polishtype.fasta || $INDIR/$polishtype/$STRAIN/$type.$polishtype.fasta -nt $OUTDIR/$STRAIN.$type.$polishtype.fasta ]]; then
+	    AAFTF sort -i $INDIR/$polishtype/$STRAIN/$type.$polishtype.fasta -o $OUTDIR/$STRAIN.$type.$polishtype.fasta
+	fi
+	
+	for polishtype in medaka pilon
 	do
 	    if [[ -s $OUTDIR/$STRAIN.${type}.$polishtype.fasta ]]; then
 		if [[ ! -f $OUTDIR/$STRAIN.$type.$polishtype.stats.txt || $OUTDIR/$STRAIN.$type.$polishtype.fasta -nt $OUTDIR/$STRAIN.$type.$polishtype.stats.txt ]]; then
                     AAFTF assess -i $OUTDIR/$STRAIN.$type.$polishtype.fasta -r $OUTDIR/$STRAIN.$type.$polishtype.stats.txt
-            	fi
+		fi
 	    fi
 	done
-    done    
-    for type in necat
-    do
-	if [[ ! -f $OUTDIR/$STRAIN.$type.stats.txt || $OUTDIR/$STRAIN.$type.fasta -nt $OUTDIR/$STRAIN.$type.stats.txt ]]; then
-    	    AAFTF assess -i $OUTDIR/$STRAIN.$type.fasta -r $OUTDIR/$STRAIN.$type.stats.txt
-	fi
     done
+    type=necat
+    if [[ ! -f $OUTDIR/$STRAIN.$type.stats.txt || $OUTDIR/$STRAIN.$type.fasta -nt $OUTDIR/$STRAIN.$type.stats.txt ]]; then
+    	AAFTF assess -i $OUTDIR/$STRAIN.$type.fasta -r $OUTDIR/$STRAIN.$type.stats.txt
+    fi
 done
 
 cat $SAMPLES | while read STRAIN ILLUMINA FAMILY PHYLUM

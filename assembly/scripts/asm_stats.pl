@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 my %stats;
-my $model = 'eurotiomycetes_odb10';
+my $model = 'sordariomycetes_odb10';
 
 my $read_map_stat = 'mapping_report';
 my $dir = shift || 'genomes';

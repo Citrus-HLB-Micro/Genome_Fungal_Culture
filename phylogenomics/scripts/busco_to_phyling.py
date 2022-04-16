@@ -254,8 +254,7 @@ for spdir in dirsToRun:
         buscolineage = res["lineage"]
         species = res["species"]
 
-        buscolineage = res["lineage"]
-        if 'CDS' not in species_seqs[species]:
+        if 'CDS' not in res:
             print("No CDS returned for {} {}".format(name, species))
             continue
 
@@ -320,23 +319,3 @@ for sp in species_seqs:
             prefixes_rev[sp], seqrec.id), description=seqrec.description))
 
     SeqIO.write(seqsrename, cdsdb, "fasta")
-#
-# for orth in orthologs:
-#     print(orth)
-#     for lineage in orthologs[orth]:
-#         pepseqs = []
-#         cdsseqs = []
-#
-#         alnoutdir = os.path.join(args.aln,lineage)
-#         if not os.path.exists(alnoutdir):
-#             os.mkdir(alnoutdir)
-#         for sp in orthologs[orth][lineage]:
-#             if sp not in prefixes_rev:
-#                 print("cannot find {} in prefixes_rev".format(sp))
-#             cdsseq = orthologs[orth][lineage][sp]["cds"]
-#             pepseq = orthologs[orth][lineage][sp]["pep"]
-#             pepseqs.append(SeqRecord(pepseq.seq,id=prefixes_rev[sp],description=pepseq.id))
-#             cdsseqs.append(SeqRecord(cdsseq.seq,id=prefixes_rev[sp],description=pepseq.id))
-#             #print("\t".join([lineage,sp]))
-#         SeqIO.write(pepseqs,os.path.join(alnoutdir,"{}.{}}".format(orth,args.pepextension)),"fasta")
-#         SeqIO.write(cdsseqs,os.path.join(alnoutdir,"{}.{}}".format(orth,args.cdsextension)),"fasta")

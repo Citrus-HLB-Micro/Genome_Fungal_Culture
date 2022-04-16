@@ -1,12 +1,12 @@
-#!/bin/bash
-#SBATCH --nodes 1 --ntasks 8 --mem 16G -p short --out logs/busco.%a.log -J busco
+#!/bin/bash -l
+#SBATCH --nodes 1 --ntasks 16 --mem 16G -p short --out logs/busco.%a.log -J busco
 
 # for augustus training
 # set to a local dir to avoid permission issues and pollution in global
 module unload miniconda3
 module load busco
-export AUGUSTUS_CONFIG_PATH=/bigdata/stajichlab/shared/pkg/augustus/3.3/config
-#export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
+#export AUGUSTUS_CONFIG_PATH=/bigdata/stajichlab/shared/pkg/augustus/3.3/config
+export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
 
 module load workspace/scratch
 
@@ -24,7 +24,7 @@ if [ ! $N ]; then
     fi
 fi
 GENOMEFOLDER=genomes
-EXT=sorted.fasta
+EXT=.fasta
 LINEAGE=sordariomycetes_odb10
 OUTFOLDER=BUSCO
 SAMPLEFILE=samples.csv
