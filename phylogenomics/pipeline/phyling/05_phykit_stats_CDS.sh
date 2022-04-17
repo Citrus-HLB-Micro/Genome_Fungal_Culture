@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash -l
 #SBATCH -p short -N 1 -n 32 --mem 64gb --out phykit_summarize.log
 
 CPU=1
