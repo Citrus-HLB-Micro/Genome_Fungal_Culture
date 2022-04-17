@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -p short -N 1 -n 32 --mem 64gb --out phykit_summarize.log
+#SBATCH -p short -N 1 -n 64 --mem 96gb --out logs/phykit_summarize_pep.log
 
 CPU=1
 if [ $SLURM_CPUS_ON_NODE ]; then
