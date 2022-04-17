@@ -24,11 +24,11 @@ if [ ! $N ]; then
     fi
 fi
 GENOMEFOLDER=genomes
-EXT=.fasta
+EXT=fasta
 LINEAGE=sordariomycetes_odb10
 OUTFOLDER=BUSCO
 SAMPLEFILE=samples.csv
-SEED_SPECIES=fusarium_solani
+SEED_SPECIES=fusarium
 GENOMEFILE=$(ls $GENOMEFOLDER/*.${EXT} | sed -n ${N}p)
 #LINEAGE=$(realpath $LINEAGE)
 

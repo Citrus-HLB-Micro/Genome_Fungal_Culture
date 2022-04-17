@@ -25,9 +25,11 @@ do
 	    fi
 	fi
 	# copy medka
+	polishtype=medaka
 	rsync -a $INDIR/$polishtype/$STRAIN/$type.polished.fasta $OUTDIR/$STRAIN.$type.$polishtype.fasta
 		
 	# copy pilon
+	polishtype=pilon
 	if [[ ! -f $OUTDIR/$STRAIN.$type.$polishtype.fasta || $INDIR/$polishtype/$STRAIN/$type.$polishtype.fasta -nt $OUTDIR/$STRAIN.$type.$polishtype.fasta ]]; then
 	    AAFTF sort -i $INDIR/$polishtype/$STRAIN/$type.$polishtype.fasta -o $OUTDIR/$STRAIN.$type.$polishtype.fasta
 	fi

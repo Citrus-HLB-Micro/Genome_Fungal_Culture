@@ -51,7 +51,7 @@ foreach my $file ( readdir(DIR) ) {
 	    open(my $fh => $telomerefile) || die $!;
 	    my %contigs_with_tel;
 	    while(<$fh>) {
-		if( /^(\S+)\s+(Forward|Reverse)\s+(\S+)/ ){
+		if( /^(\S+)\s+(forward|reverse)\s+(\S+)/i ){
 		    $contigs_with_tel{$1}->{$2} = $3;
 		} elsif (/^Telomeres found:\s+(\d+)\s+\((\S+)\s+forward,\s+(\S+)\s+reverse\)/ ) {
 		    $stats{$stem}->{'Telomeres_Found'} = $1;
@@ -60,8 +60,8 @@ foreach my $file ( readdir(DIR) ) {
 		}
 	    }
 	    for my $ctg ( keys %contigs_with_tel ) {
-		if (exists $contigs_with_tel{$ctg}->{'Forward'} &&
-		    exists $contigs_with_tel{$ctg}->{'Reverse'} ) {
+		if (exists $contigs_with_tel{$ctg}->{'forward'} &&
+		    exists $contigs_with_tel{$ctg}->{'reverse'} ) {
 		    $stats{$stem}->{'Telomeres_CompleteChrom'} +=1; # or ++ but count up the number of times we have a ctg w fwd&rev
 		}
 	    }
