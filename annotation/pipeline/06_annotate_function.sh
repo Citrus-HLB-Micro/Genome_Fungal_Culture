@@ -14,7 +14,7 @@ CPUS=$SLURM_CPUS_ON_NODE
 OUTDIR=annotate
 INDIR=genomes
 SAMPFILE=samples.csv
-BUSCO=fungi_odb10
+BUSCO=sordariomycetes_odb10
 
 if [ -z $CPUS ]; then
   CPUS=1
