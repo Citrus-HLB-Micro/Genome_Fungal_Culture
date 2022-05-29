@@ -132,6 +132,7 @@ foreach my $file ( readdir(DIR) ) {
     
 	my $sumstatfile = File::Spec->catfile($read_map_stat,
 					      sprintf("%s.bbmap_summary.txt",$stem));
+	warn("sumstat is $sumstatfile\n");
 	if ( -f $sumstatfile ) {
 	    open(my $fh => $sumstatfile) || die "Cannot open $sumstatfile: $!";
 	    my $read_dir = 0;
