@@ -3,10 +3,18 @@
 
 module load funannotate
 
-#PASAHOMEPATH=$(dirname `which Launch_PASA_pipeline.pl`)
 #TRINITYHOMEPATH=$(dirname `which Trinity`)
+export PASACONF=$HOME/pasa.config.txt
+export PASAHOMEPATH=$(dirname `which Launch_PASA_pipeline.pl`)
+export PASAHOME=$HOME/.pasa
+export FUNANNOTATE_DB=/bigdata/stajichlab/shared/lib/funannotate_db
 
-export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
+export FUNANNOTATE_DB=/bigdata/stajichlab/shared/lib/funannotate_db
+export PASACONF=$HOME/pasa.config.txt
+export PASAHOMEPATH=$HOME/.pasa
+export PASAHOME=$HOME/.pasa
+
+
 MEM=64G
 CPU=$SLURM_CPUS_ON_NODE
 if [ -z $CPU ]; then
@@ -35,8 +43,6 @@ if [ $N -gt $MAX ]; then
     exit
 fi
 
-export FUNANNOTATE_DB=/bigdata/stajichlab/shared/lib/funannotate_db
-export PASACONF=$HOME/pasa.config.txt
 SBT=$(realpath lib/fusarium.sbt) # this can be changed
 
 IFS=,
