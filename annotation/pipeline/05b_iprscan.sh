@@ -1,12 +1,8 @@
-#!/bin/bash
-#SBATCH --ntasks 24 --nodes 1 --mem 96G -p intel
-#SBATCH --time 72:00:00 --out logs/iprscan.%a.log
-module unload miniconda2
+#!/bin/bash -l
+#SBATCH --ntasks 64 --nodes 1 --mem 96G -p short
+#SBATCH --out logs/iprscan.%a.log
 module unload miniconda3
-module load anaconda3
-module load funannotate/1.8.2
-module unload perl
-module unload python
+module load funannotate
 module load iprscan
 CPU=1
 if [ ! -z $SLURM_CPUS_ON_NODE ]; then
@@ -34,8 +30,6 @@ do
   BASE=$(echo -n "$SPECIES $STRAIN" | perl -p -e 's/\s+/_/g')
   name=$BASE
   echo "$BASE"
-  MASKED=$(realpath $INDIR/$BASE.masked.fasta)
-
   if [ ! -d $OUTDIR/$name ]; then
     echo "No annotation dir for ${name}"
     exit
@@ -44,6 +38,7 @@ do
   XML=$OUTDIR/$name/annotate_misc/iprscan.xml
   IPRPATH=$(which interproscan.sh)
   if [ ! -f $XML ]; then
+    echo "running on $OUTDIR/$name"
     funannotate iprscan -i $OUTDIR/$name -o $XML -m local -c $CPU --iprscan_path $IPRPATH
   fi
 done
