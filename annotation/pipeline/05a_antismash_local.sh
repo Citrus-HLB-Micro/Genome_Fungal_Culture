@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 #SBATCH --nodes 1 --ntasks 8 --mem 16G --out logs/antismash.%a.log -J antismash
 
 module load antismash
@@ -25,7 +25,7 @@ if [ $N -gt $MAX ]; then
   exit
 fi
 
-INPUTFOLDER=predict_results
+INPUTFOLDER=update_results
 
 IFS=,
 tail -n +2 $SAMPFILE | sed -n ${N}p | while read SPECIES STRAIN PHYLUM LOCUSTAG
@@ -45,8 +45,13 @@ do
     #	antismash --taxon fungi --output-dir $OUTDIR/$name/antismash_local  --genefinding-tool none \
       #    --asf --fullhmmer --cassis --clusterhmmer --asf --cb-general --pfam2go --cb-subclusters --cb-knownclusters -c $CPU \
       #    $OUTDIR/$name/$INPUTFOLDER/*.gbk
+      ct=$(ls $OUTDIR/$name/$INPUTFOLDER/*.gbk)
+      if [ -z $ct ]; then
+      	ct=$(ls $OUTDIR/$name/predict_results/*.gbk)
+      fi
+      echo "using $ct as input GBK file"
     time antismash --taxon fungi --output-dir $OUTDIR/$name/antismash_local \
       --genefinding-tool none --fullhmmer --clusterhmmer --cb-general \
-      --pfam2go -c $CPU $OUTDIR/$name/$INPUTFOLDER/*.gbk
+      --pfam2go -c $CPU $ct
   fi
 done
