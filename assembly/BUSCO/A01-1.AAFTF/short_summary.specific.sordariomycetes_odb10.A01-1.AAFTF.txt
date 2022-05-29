@@ -1,0 +1,24 @@
+# BUSCO version is: 5.3.0 
+# The lineage dataset is: sordariomycetes_odb10 (Creation date: 2020-08-05, number of genomes: 97, number of BUSCOs: 3817)
+# Summarized benchmarking in BUSCO notation for file /bigdata/stajichlab/shared/projects/ECDRE/Genomes/Fusarium/assembly/genomes/A01-1.AAFTF.fasta
+# BUSCO was run in mode: genome
+# Gene predictor used: augustus
+
+	***** Results: *****
+
+	C:99.8%[S:98.8%,D:1.0%],F:0.1%,M:0.1%,n:3817	   
+	3810	Complete BUSCOs (C)			   
+	3771	Complete and single-copy BUSCOs (S)	   
+	39	Complete and duplicated BUSCOs (D)	   
+	5	Fragmented BUSCOs (F)			   
+	2	Missing BUSCOs (M)			   
+	3817	Total BUSCO groups searched		   
+
+Dependencies and versions:
+	hmmsearch: 3.1
+	makeblastdb: 2.12.0+
+	tblastn: 2.12.0+
+	augustus: 3.4.0
+	gff2gbSmallDNA.pl: None
+	new_species.pl: None
+	etraining: None
