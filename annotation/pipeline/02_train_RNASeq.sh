@@ -17,6 +17,7 @@ export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
 export FUNANNOTATE_DB=/bigdata/stajichlab/shared/lib/funannotate_db
 export PASACONF=$HOME/pasa.config.txt
 export PASAHOMEPATH=$(dirname `which Launch_PASA_pipeline.pl`)
+export PASAHOME=$HOME/.pasa
 export TRINITY=$(realpath `which Trinity`)
 export TRINITYHOMEPATH=$(dirname $TRINITY)
 
