@@ -18,7 +18,9 @@ my %header_seen;
 opendir(DIR,$dir) || die $!;
 my $first = 1;
 foreach my $file ( readdir(DIR) ) {
-    next unless ( $file =~ /(\S+)(\.fasta)?\.stats.txt$/);
+# special for Tania's work since she has mixed final sorted files and other subsets in same folder
+    next unless ( $file =~ /(\S+).sorted(\.fasta)?\.stats.txt$/);
+    #next unless ( $file =~ /(\S+)(\.fasta)?\.stats.txt$/);
     my $stem = $1;
     $stem =~ s/\.sorted//;
     #warn("$file ($dir)\n");
@@ -46,7 +48,9 @@ foreach my $file ( readdir(DIR) ) {
 	    push @header, qw(Telomeres_Found Telomeres_Fwd Telomeres_Rev Telomeres_CompleteChrom);
 	}
 	my $telomerefile = File::Spec->catfile($telomere_report,sprintf("%s.telomere_report.txt",$stem));
-	
+  	if ( ! -f telomerefile ) {
+		$telomerefile = File::Spec->catfile($telomere_report,sprintf("%s.sorted.telomere_report.txt",$stem));
+	}
 	if ( -f $telomerefile ) {
 	    open(my $fh => $telomerefile) || die $!;
 	    my %contigs_with_tel;
@@ -68,7 +72,6 @@ foreach my $file ( readdir(DIR) ) {
 	}
 
     }
-
     if ( -d $BUSCO_dir ) {
 	if ( $first ) { 
 	    push @header, qw(BUSCO_Complete BUSCO_Single BUSCO_Duplicate
@@ -79,7 +82,7 @@ foreach my $file ( readdir(DIR) ) {
 	my $busco_file = File::Spec->catfile($BUSCO_dir,$stem, 
 					     sprintf("short_summary.specific.%s.%s.txt",$model,$stem));
 	
-	
+   	warn"busco file is $busco_file\n";	
 	if ( -f $busco_file ) {	    
 	    open(my $fh => $busco_file) || die $!;
 	    while(<$fh>) {	 
