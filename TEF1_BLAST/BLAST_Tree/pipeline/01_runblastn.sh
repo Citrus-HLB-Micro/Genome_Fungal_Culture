@@ -8,7 +8,8 @@ GENOMEFOLDER=genomes
 BLAST=blastn
 mkdir -p $BLAST
 SAMPLES=strains.csv
-GENE=NRRL_44887_FFSC_Asian_fujikuroi_Human_USA_inf
+GENE=TEF1
+#GENE=NRRL_44887_FFSC_Asian_fujikuroi_Human_USA_inf
 
 if [ $SLURM_CPUS_ON_NODE ]; then
  CPU=$SLURM_CPUS_ON_NODE

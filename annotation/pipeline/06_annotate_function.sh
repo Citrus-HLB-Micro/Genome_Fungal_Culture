@@ -1,6 +1,6 @@
 #!/usr/bin/bash -l
 #SBATCH --nodes=1
-#SBATCH --ntasks=16 --mem 16gb
+#SBATCH --ntasks=16 --mem 48gb
 #SBATCH --output=logs/annotfunc.%a.log
 #SBATCH --time=2-0:00:00
 #SBATCH -p intel -J annotfunc
@@ -10,6 +10,8 @@ module load funannotate
 module load phobius
 
 export FUNANNOTATE_DB=/bigdata/stajichlab/shared/lib/funannotate_db
+export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
+
 CPUS=$SLURM_CPUS_ON_NODE
 OUTDIR=annotate
 INDIR=genomes
@@ -41,12 +43,13 @@ do
   BASE=$(echo -n "$SPECIES $STRAIN" | perl -p -e 's/\s+/_/g')
   STRAIN_NOSPACE=$(echo -n "$STRAIN" | perl -p -e 's/\s+/_/g')
   echo "$BASE"
+  MOREFEATURE=""
   MASKED=$(realpath $INDIR/$BASE.masked.fasta)
   if [ ! -f $MASKED ]; then
     echo "Cannot find $BASE.masked.fasta in $INDIR - may not have been run yet"
     exit
   fi
-  TEMPLATE=$(realpath lib/sbt/$STRAIN_NOSPACE.sbt)
+  TEMPLATE=$(realpath lib/fusarium.sbt)
   if [ ! -f $TEMPLATE ]; then
     echo "NO TEMPLATE for $name"
     exit
@@ -62,5 +65,5 @@ do
     fi
   fi
   # need to add detect for antismash and then add that
-  funannotate annotate --sbt $TEMPLATE --busco_db $BUSCO -i $OUTDIR/$BASE --species "$SPECIES" --strain "$STRAIN" --cpus $CPUS $MOREFEATURE $EXTRAANNOT
+  funannotate annotate --sbt $TEMPLATE --busco_db $BUSCO -i $OUTDIR/$BASE --species "$SPECIES" --strain "$STRAIN" --cpus $CPUS $MOREFEATURE $EXTRAANNOT --rename $LOCUSTAG
 done

@@ -1,6 +1,0 @@
-SRR10174167	Fusarium humuli
-SRR10174162	Fusarium humuli
-ERR2191962	Fusarium culmorum
-#SRR10137402    Fusarium oxysporum
-#SRR11280169    Fusarium solani
-#SRR13789084    Fusarium odoratissimum

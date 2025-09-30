@@ -6,4 +6,4 @@ module load IQ-TREE/2.2.0
 module unload perl
 module load miniconda3
 
-iqtree2 -nt 2 -s TEF1_short.aln -b 1000
+iqtree2 -nt 2 -s TEF1_new.aln.clipkit -b 1000

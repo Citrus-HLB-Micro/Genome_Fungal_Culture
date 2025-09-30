@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --ntasks 64 --nodes 1 --mem 96G -p short
+#SBATCH --ntasks 64 --nodes 1 --mem 96G -p short -C xeon
 #SBATCH --out logs/iprscan.%a.log
 module unload miniconda3
 module load funannotate

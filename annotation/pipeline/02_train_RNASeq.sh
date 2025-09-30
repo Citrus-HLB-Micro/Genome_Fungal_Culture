@@ -2,7 +2,7 @@
 
 #SBATCH --nodes=1
 #SBATCH --ntasks=16
-#SBATCH --mem 128gb -p intel
+#SBATCH --mem 500gb -p intel
 #SBATCH --time=3-00:15:00
 #SBATCH --output=logs/train.%a.log
 #SBATCH --job-name="TrainFun"

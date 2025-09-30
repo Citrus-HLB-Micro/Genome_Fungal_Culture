@@ -4,5 +4,5 @@
 module load muscle
 module load fasttree
 
-muscle -super5 TEF1_short.fa -output TEF1_short.aln
-fasttree <TEF1_short.aln> TEF1_short.tre
+muscle -super5 TEF1_new.fna -output TEF1_new.aln
+fasttree <TEF1_new.aln> TEF1_new.tre

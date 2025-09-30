@@ -1,10 +1,11 @@
 #!/bin/bash -l
-#SBATCH --nodes 1 --ntasks 16 --mem 16G -p short --out logs/busco.%a.log -J busco
+#SBATCH --nodes 1 --ntasks 8 --mem 16G -p short --out logs/busco.%a.log -J busco
 
 # for augustus training
 # set to a local dir to avoid permission issues and pollution in global
 module unload miniconda3
-module load busco
+#module load busco
+module load busco/5.3.2
 #export AUGUSTUS_CONFIG_PATH=/bigdata/stajichlab/shared/pkg/augustus/3.3/config
 export AUGUSTUS_CONFIG_PATH=$(realpath lib/augustus/3.3/config)
 
@@ -15,10 +16,10 @@ N=${SLURM_ARRAY_TASK_ID}
 if [ ! $CPU ]; then
      CPU=2
 fi
-
-if [ ! $N ]; then
+export NUMEXPR_MAX_THREADS=$CPU
+if [ -z $N ]; then
     N=$1
-    if [ ! $N ]; then
+    if [ -z $N ]; then
         echo "Need an array id or cmdline val for the job"
         exit
     fi
@@ -27,7 +28,7 @@ GENOMEFOLDER=genomes
 EXT=fasta
 LINEAGE=sordariomycetes_odb10
 OUTFOLDER=BUSCO
-SAMPLEFILE=samples.csv
+SAMPLEFILE=samples2.csv
 SEED_SPECIES=fusarium
 GENOMEFILE=$(ls $GENOMEFOLDER/*.${EXT} | sed -n ${N}p)
 #LINEAGE=$(realpath $LINEAGE)
